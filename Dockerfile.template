@@ -1,0 +1,14 @@
+FROM resin/%%RESIN_MACHINE_NAME%%-golang:1.9-stretch AS build
+
+WORKDIR /go/src/github.com/ryaxx/rtubridge
+
+COPY / ./
+
+RUN go get -d ./ ... && \
+    go build
+
+FROM resin/%%RESIN_MACHINE_NAME%%-debian:stretch
+
+COPY --from=build /go/src/github.com/ryaxx/rtubridge .
+
+CMD ./rtubridge
